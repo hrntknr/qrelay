@@ -1,0 +1,12 @@
+[Unit]
+Description=qrelay SSH relay proxy
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/qrelay server --listen :9443 --backend localhost:22
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

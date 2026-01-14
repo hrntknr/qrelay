@@ -1,0 +1,33 @@
+[package]
+name = "qrelay"
+version = "0.1.0"
+edition = "2021"
+description = "Reconnectable, order-guaranteed, lossless byte stream TCP proxy"
+license = "MIT"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+quinn = "0.11"
+rustls = { version = "0.23", default-features = false, features = ["ring"] }
+rcgen = "0.14"
+time = "0.3"
+sha2 = "0.10"
+rustls-pemfile = "2"
+webpki-roots = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+thiserror = "2"
+bytes = "1"
+getrandom = "0.2"
+humantime = "2"
+dirs = "6"
+hickory-resolver = "0.25"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[dev-dependencies]
+assert_cmd = "2"
+predicates = "3"
+tempfile = "3"
