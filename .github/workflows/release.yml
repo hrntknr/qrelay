@@ -16,12 +16,11 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             artifact_name: qrelay-linux-x86_64
-          - os: ubuntu-latest
+
+          - os: ubuntu-24.04-arm
             target: aarch64-unknown-linux-gnu
             artifact_name: qrelay-linux-aarch64
-          - os: macos-latest
-            target: x86_64-apple-darwin
-            artifact_name: qrelay-darwin-x86_64
+
           - os: macos-latest
             target: aarch64-apple-darwin
             artifact_name: qrelay-darwin-aarch64
@@ -36,21 +35,13 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
-      - name: Setup Zig
-        uses: goto-bus-stop/setup-zig@v2
-
-      - name: Install cargo-zigbuild
-        uses: taiki-e/install-action@cargo-zigbuild
-
       - name: Build
         shell: bash
         run: |
-          if [ "${{ runner.os }}" = "macOS" ]; then
-            export SDKROOT=$(xcrun --show-sdk-path)
-          fi
-          cargo zigbuild --release --target ${{ matrix.target }}
+          cargo build --release --target ${{ matrix.target }}
 
       - name: Package
+        shell: bash
         run: |
           mkdir -p dist
           cp target/${{ matrix.target }}/release/qrelay dist/
@@ -66,7 +57,6 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
