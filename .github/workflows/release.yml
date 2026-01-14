@@ -43,7 +43,12 @@ jobs:
         uses: taiki-e/install-action@cargo-zigbuild
 
       - name: Build
-        run: cargo zigbuild --release --target ${{ matrix.target }}
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "macOS" ]; then
+            export SDKROOT=$(xcrun --show-sdk-path)
+          fi
+          cargo zigbuild --release --target ${{ matrix.target }}
 
       - name: Package
         run: |
